@@ -12,10 +12,12 @@ class BookRecord extends React.Component{
             <div className="todo-item">
                 <button onClick={this.handleOnClick}> Add book</button>
                 <p>{this.props.item.title}</p>
-                <Image src={this.props.item.imageUrl} height={240} width={240}/>
+                <Image src={this.props.item.image_url} height={240} width={240}/>
             </div>
         )
     }
 }
 
-export default BookRecord
+
+
+export default BookRecord;

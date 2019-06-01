@@ -17,7 +17,7 @@ export default class Home extends Component{
                     </p>
                 </Jumbotron>
                 <Link to="About">
-                    <Button bsStyle="primary">About </Button>
+                    <Button >About </Button>
                 </Link>
             </Container>
         )

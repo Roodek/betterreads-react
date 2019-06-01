@@ -27,43 +27,37 @@ class LoginForm extends React.Component{
     handleSubmit = (event) =>{
         event.preventDefault()
 
-        /*if (!this.state.username || !this.state.password) {
+        if (!this.state.username || !this.state.password) {
              return this.setState({ errors:{ user:'Username is required',
                                             pass: 'Password is required'}});
-        }*/
-
-        this.props.loginFunc()
-
+        }
+        this.props.handleLoginForm();
 
         return this.setState({ errors: '' });
     };
 
-    handleUserChange =(event) => {
-        this.setState({
-            username: event.target.value,
-        });
-    };
 
-    handlePassChange =(event) => {
+    handleChange =(event) =>{
         this.setState({
-            password: event.target.value,
+            [event.target.id]: event.target.value
         });
-    };
+        console.log(this.state)
+    }
 
     render() {
         return(
             <div className="LoginForm">
             <Form inline onSubmit={this.handleSubmit}>
-                <Form.Group controlId="formBasicEmail">
+                <Form.Group controlId="user">
                     <Form.Label/>
-                    <Form.Control size="sm" type="text" placeholder={this.state.errors.user}/>
+                    <Form.Control size="sm" type="text"  placeholder={this.state.errors.user} onChange={this.handleChange}/>
                     <Form.Text className="text-muted">
                     </Form.Text>
                 </Form.Group>
 
-                <Form.Group controlId="formBasicPassword">
+                <Form.Group controlId="pass">
                     <Form.Label/>
-                    <Form.Control size="sm" type="password" placeholder={this.state.errors.pass}/>
+                    <Form.Control size="sm" type="password"  placeholder={this.state.errors.pass} onChange={this.handleChange}/>
                 </Form.Group>
 
                 <Button size="sm" variant="primary" type="submit">

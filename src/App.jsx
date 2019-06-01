@@ -1,30 +1,49 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
+import Home from './components/Home';
+import About from './components/About';
+import Library from './components/Library';
+import Navbar from './components/CustomNavbar';
+import MyList from "./components/MyList";
 
 
 
 class App extends Component {
-  render() {
+
+
+    constructor(){
+        super();
+
+        this.state ={
+            isAuthenticated: false
+        }
+    }
+
+
+    handleLoginForm = () =>{
+        this.setState({
+            isAuthenticated: !this.state.isAuthenticated
+        });
+        console.log(this.state.isAuthenticated)
+
+    };
+
+
+    render() {
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="public/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <Router>
+          <div>
+              <Navbar handleLoginForm = {this.handleLoginForm} isAuthenticated={this.state.isAuthenticated}/>
+              <Route exact path="/" component={Home}/>
+              <Route  path="/about" component={About}/>
+              <Route  path="/library" component={Library}/>
+              <Route  path="/mylist" component={MyList}/>
+          </div>
+        </Router>
     );
-  }
+    }
 }
 
 export default App;

@@ -18,8 +18,8 @@ class MyList extends Component {
         const toShowIitems = this.state.books.map(item => <BookRecord key={item.id} item={item}/>);
         return (
             <div>
-                rendering books
-                {toShowIitems}
+
+
             </div>
         );
     }

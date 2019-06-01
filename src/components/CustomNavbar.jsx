@@ -25,7 +25,7 @@ export default class CustomNavbar extends Component {
                         <Nav.Link eventKey={1} href="/">   Home   </Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link eventKey={2} href="/News">News</Nav.Link>
+                        <Nav.Link eventKey={2} href="/Library">Library</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link eventKey={3} href="/About">About</Nav.Link>
@@ -38,12 +38,12 @@ export default class CustomNavbar extends Component {
                     }
                     {this.props.isAuthenticated ?
                         <Form inline>
-                        <Button size="sm" variant="primary" onClick={ () => this.props.authentication()}>
+                        <Button size="sm" variant="primary" onClick={ () => this.props.handleLoginForm()}>
                             Logout
                         </Button>
                         </Form>
                         :
-                        <LoginForm loginFunc={ () => this.props.authentication()}/>
+                        <LoginForm handleLoginForm={this.props.handleLoginForm} />
                     }
 
                 </Nav>
