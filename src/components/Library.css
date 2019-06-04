@@ -1,0 +1,12 @@
+.library{
+
+    background-image: url("https://www.cabaretelanguage.com/wp-content/uploads/2016/01/books.jpg");
+    background-color: darkgray;
+    background-repeat: repeat;
+    background-blend-mode: overlay;
+
+}
+.pages{
+    text-align: center;
+
+}

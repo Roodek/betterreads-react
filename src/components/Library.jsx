@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import BookRecord from "./BookRecord";
+import {Spinner,Button} from "react-bootstrap";
+import './Library.css';
 
 
-import axios from 'axios'
 
 class Library extends Component {
     constructor(){
@@ -44,7 +45,7 @@ class Library extends Component {
 
     render() {
 
-        const {lodaing, books, currentPage, booksPerPage} = this.state
+        const {loading, books, currentPage, booksPerPage} = this.state
         //const Books = this.state.books.map(item => <BookRecord key={item.id} item={item}/>);
 
         const indexOfLastBook = currentPage * booksPerPage;
@@ -62,33 +63,50 @@ class Library extends Component {
         }
         const renderPageNumbers =pageNumbers.map(number =>{
             return(
-                <button
-                key={number}
-                id={number}
-                onClick={this.handleClick}
-                disabled={currentPage===number}>
+                <Button
+                    variant="dark"
+                    key={number}
+                    id={number}
+                    onClick={this.handleClick}
+                    disabled={currentPage===number}
+                >
                     {number}
-                </button>
+                </Button>
             );
         });
 
+        const isLoading =(loading) =>{
+            if(loading) {
+                return (
+                    <Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </Spinner>
+                )
+            }
+        }
+
         return (
 
-            <div>
-                Library:
-                <ul id="page-numbers">
-                    <button id={1} onClick={this.handleClick}> {"<<"} </button>
-                    {renderPageNumbers}
-                    <button id={Math.ceil(books.length/booksPerPage)} onClick={this.handleClick}>{">>"}</button>
-                </ul>
+            <div className="library">
+
+                <div className="pages" >
+                    <ul  id="page-numbers">
+                        <Button id={1} onClick={this.handleClick} variant="dark"> {"<<"} </Button>
+                        {renderPageNumbers}
+                        <Button id={Math.ceil(books.length/booksPerPage)} onClick={this.handleClick} variant="dark">{">>"}</Button>
+                    </ul>
+                </div>
                 <ul id="book-records">
+                    {isLoading(loading)}
                     {renderBooks}
                 </ul>
-                <ul id="page-numbers">
-                    <button id={1} onClick={this.handleClick}> {"<<"} </button>
-                    {renderPageNumbers}
-                    <button id={Math.ceil(books.length/booksPerPage)} onClick={this.handleClick}>{">>"}</button>
-                </ul>
+                <div className="pages">
+                    <ul  id="page-numbers">
+                        <Button id={1} onClick={this.handleClick} variant="dark"> {"<<"} </Button>
+                        {renderPageNumbers}
+                        <Button id={Math.ceil(books.length/booksPerPage)} onClick={this.handleClick} variant="dark">{">>"}</Button>
+                    </ul>
+                </div>
                 <br/>
                 <br/>
                 <br/>

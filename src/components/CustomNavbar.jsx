@@ -38,7 +38,7 @@ export default class CustomNavbar extends Component {
                     }
                     {this.props.isAuthenticated ?
                         <Form inline>
-                        <Button size="sm" variant="primary" onClick={ () => this.props.handleLoginForm()}>
+                        <Button size="sm" variant="primary" onClick={ () => this.props.handleLoginForm}>
                             Logout
                         </Button>
                         </Form>
