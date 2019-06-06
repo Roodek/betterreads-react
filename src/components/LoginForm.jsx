@@ -4,8 +4,8 @@ import React from "react";
 
 class LoginForm extends React.Component{
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             username: '',
             password: '',
@@ -24,15 +24,14 @@ class LoginForm extends React.Component{
             }})
     };
 
-    handleSubmit = (event) =>{
-        event.preventDefault()
+    handleSubmit = () =>{
 
         if (!this.state.username || !this.state.password) {
              return this.setState({ errors:{ user:'Username is required',
                                             pass: 'Password is required'}});
+
         }
         this.props.handleLoginForm();
-
         return this.setState({ errors: '' });
     };
 
@@ -41,26 +40,26 @@ class LoginForm extends React.Component{
         this.setState({
             [event.target.id]: event.target.value
         });
-        console.log(this.state)
+
     }
 
     render() {
         return(
             <div className="LoginForm">
-            <Form inline onSubmit={this.handleSubmit}>
-                <Form.Group controlId="user">
+            <Form inline >
+                <Form.Group controlId="username">
                     <Form.Label/>
                     <Form.Control size="sm" type="text"  placeholder={this.state.errors.user} onChange={this.handleChange}/>
                     <Form.Text className="text-muted">
                     </Form.Text>
                 </Form.Group>
 
-                <Form.Group controlId="pass">
+                <Form.Group controlId="password">
                     <Form.Label/>
                     <Form.Control size="sm" type="password"  placeholder={this.state.errors.pass} onChange={this.handleChange}/>
                 </Form.Group>
 
-                <Button size="sm" variant="primary" type="submit">
+                <Button size="sm" variant="primary" onClick={() => this.handleSubmit()}>
                     Submit
                 </Button>
             </Form>

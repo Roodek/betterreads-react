@@ -14,7 +14,6 @@ class App extends Component {
 
     constructor(){
         super();
-
         this.state ={
             isAuthenticated: false
         }
@@ -25,17 +24,21 @@ class App extends Component {
         this.setState({
             isAuthenticated: !this.state.isAuthenticated
         });
-        console.log(this.state.isAuthenticated)
+        if(this.state.isAuthenticated) {
+            localStorage.setItem('authenticated', 'true')
+        }
+        else{
+            localStorage.clear()
+        }
 
     };
-
 
     render() {
 
     return (
         <Router>
           <div>
-              <Navbar handleLoginForm = {this.handleLoginForm} isAuthenticated={this.state.isAuthenticated}/>
+              <Navbar handleLoginForm = {this.handleLoginForm} isAuthenticated={localStorage.getItem('authenticated')}/>
               <Route exact path="/" component={Home}/>
               <Route  path="/about" component={About}/>
               <Route  path="/library" component={Library}/>

@@ -6,8 +6,8 @@ import LoginForm from "./LoginForm";
 
 export default class CustomNavbar extends Component {
 
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
 
     }
 
@@ -30,19 +30,20 @@ export default class CustomNavbar extends Component {
                     <Nav.Item>
                         <Nav.Link eventKey={3} href="/About">About</Nav.Link>
                     </Nav.Item>
-                    {this.props.isAuthenticated &&
+                    {Boolean(localStorage.getItem('authenticated')) &&
                     <Nav.Item>
                         <Nav.Link eventKey={4} href="/MyList">My BookList</Nav.Link>
                     </Nav.Item>
 
                     }
-                    {this.props.isAuthenticated ?
+                    {Boolean(localStorage.getItem('authenticated')) ?
                         <Form inline>
-                        <Button size="sm" variant="primary" onClick={ () => this.props.handleLoginForm}>
+                        <Button size="sm" variant="primary" onClick={this.props.handleLoginForm}>
                             Logout
                         </Button>
                         </Form>
                         :
+
                         <LoginForm handleLoginForm={this.props.handleLoginForm} />
                     }
 

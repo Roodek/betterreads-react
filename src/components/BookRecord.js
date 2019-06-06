@@ -20,8 +20,8 @@ class BookRecord extends React.Component{
         this.setState({viewed:!this.state.viewed})
     };
 
-    addBook =(option) =>{
-        console.log("book \""+this.props.item.title+"\" added with option: "+option);
+    addBook =() =>{
+        console.log("book \""+this.props.item.title+"\"");
     }
 
     showViewedBook =(viewed) =>{
@@ -32,14 +32,13 @@ class BookRecord extends React.Component{
                     <div className="book-card">
                     <Image src={this.props.item.image_url} height={240} width={240}/>
                     <Card.Body >
-                        <Card.Title>{this.props.item.title}</Card.Title>
+                        <Card.Title>{this.props.item.authors}</Card.Title>
                         <Card.Text>
                             Some quick example text to build on the card title and make up the bulk of
                             the card's content.
                         </Card.Text>
-                        <Button variant="info" onClick={() => this.addBook(1)}>To read</Button>
-                        <Button variant="info" onClick={() =>this.addBook(2)}>Reading</Button>
-                        <Button variant="info" onClick={() =>this.addBook(3)}>I already read that</Button>
+                        {localStorage.getItem('authenticated') && <Button variant="info" onClick={() => this.addBook}>To read</Button>}
+
                     </Card.Body>
                     </div>
                 </Card>

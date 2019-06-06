@@ -10,10 +10,10 @@ export default class Home extends Component{
             <Container>
                 <Jumbotron>
                     <h2>
-                        Welcome to my app!!
+                        Welcome to betterReads!!
                     </h2>
                     <p>
-                        soon betterReads
+                        your place to view and manage your book records
                     </p>
                 </Jumbotron>
                 <Link to="About">
