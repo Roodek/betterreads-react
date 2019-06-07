@@ -33,18 +33,36 @@ class Library extends Component {
     }
     getSlicedData = async (currentPage) => {
         this.setState({loading: true})
-        const api_call = await fetch("http://34.90.125.25:9000/api/books/page="+currentPage);
-        const data =  await api_call.json();
-        this.setState({books: data})
-        this.setState({loading: false})
+        try {
 
 
+            const api_call = await fetch("http://34.90.125.25:9000/api/books/page=" + currentPage);
+            const data = await api_call.json();
+            this.setState({books: data})
+            this.setState({loading: false})
+        }catch (e) {
+
+        }
     }
 
     handleClick = (event) =>{
         this.getSlicedData(event.target.id)
         this.setState({currentPage: Number(event.target.id)})
 
+    }
+
+    handleSearch =async(searchPhrase) =>{
+        this.setState({loading: true})
+        try {
+
+
+            const api_call = await fetch("http://34.90.125.25:9000/api/books/search?query=" + searchPhrase);
+            const data = await api_call.json();
+            this.setState({books: data})
+            this.setState({loading: false})
+        }catch (e) {
+
+        }
     }
 
     render() {
@@ -88,19 +106,23 @@ class Library extends Component {
         const isLoading =(loading) =>{
             if(loading) {
                 return (
+                    <div className="spinner">
                     <Spinner animation="border" role="status">
                         <span className="sr-only">Loading...</span>
                     </Spinner>
+                    </div>
                 )
             }
         }
+
+
 
         return (
 
             <div className="library">
                 <div className="search-bar">
-                     <SearchBar search={'author'}/>
-                     <SearchBar search={'title'}/>
+                     <SearchBar search={'author or title'} handleSearch={this.handleSearch}/>
+
                 </div>
 
 

@@ -37,7 +37,7 @@ class BookRecord extends React.Component{
                             Some quick example text to build on the card title and make up the bulk of
                             the card's content.
                         </Card.Text>
-                        {localStorage.getItem('authenticated') && <Button variant="info" onClick={() => this.addBook}>To read</Button>}
+                        {localStorage.getItem('authenticated') && <Button variant="info" onClick={() => this.addBook()}>To read</Button>}
 
                     </Card.Body>
                     </div>

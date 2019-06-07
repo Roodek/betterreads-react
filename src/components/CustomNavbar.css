@@ -13,6 +13,7 @@
 
     background: #c1d68570;
 
+
 }
 .nav-justified .nav-item {
     -ms-flex-preferred-size: 0;
@@ -21,6 +22,7 @@
     flex-grow: 1;
     text-align: center;
     padding-left: 2rem;
+    font-weight: bolder;
 }
 .navbar-brand {
     display: inline-block;

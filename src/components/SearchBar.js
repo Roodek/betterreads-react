@@ -15,7 +15,7 @@ class SearchBar extends Component {
     }
 
     handleClick =() =>{
-
+        this.props.handleSearch(this.state.field)
     }
 
     handleChange =(event) =>{

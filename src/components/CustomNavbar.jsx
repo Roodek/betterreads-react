@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Navbar, Nav, NavItem, Form, FormControl, Button } from 'react-bootstrap';
+import { Navbar, Nav, Form,Button } from 'react-bootstrap';
 import './CustomNavbar.css'
 
 import LoginForm from "./LoginForm";
@@ -34,8 +34,8 @@ export default class CustomNavbar extends Component {
                     <Nav.Item>
                         <Nav.Link eventKey={4} href="/MyList">My BookList</Nav.Link>
                     </Nav.Item>
-
                     }
+
                     {Boolean(localStorage.getItem('authenticated')) ?
                         <Form inline>
                         <Button size="sm" variant="primary" onClick={this.props.handleLoginForm}>
@@ -46,7 +46,11 @@ export default class CustomNavbar extends Component {
 
                         <LoginForm handleLoginForm={this.props.handleLoginForm} />
                     }
-
+                    {!Boolean(localStorage.getItem('authenticated')) &&
+                    <Nav.Item>
+                        <Button href="/SignUp" size="sm">SignUp</Button>
+                    </Nav.Item>
+                    }
                 </Nav>
             </Navbar>
         )

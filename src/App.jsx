@@ -6,6 +6,7 @@ import About from './components/About';
 import Library from './components/Library';
 import Navbar from './components/CustomNavbar';
 import MyList from "./components/MyList";
+import SignUp from "./components/SignUp";
 
 
 
@@ -43,6 +44,7 @@ class App extends Component {
               <Route  path="/about" component={About}/>
               <Route  path="/library" component={Library}/>
               <Route  path="/mylist" component={MyList}/>
+              <Route  path="/signup" component={SignUp}/>
           </div>
         </Router>
     );
