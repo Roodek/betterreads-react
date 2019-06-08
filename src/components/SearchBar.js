@@ -4,6 +4,7 @@ import {Form, Button, ButtonToolbar} from "react-bootstrap";
 import './SearchBar.css'
 
 
+
 class SearchBar extends Component {
 
     constructor(props){

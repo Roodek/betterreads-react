@@ -10,6 +10,7 @@ import SignUp from "./components/SignUp";
 
 
 
+
 class App extends Component {
 
 
@@ -22,14 +23,13 @@ class App extends Component {
 
 
     handleLoginForm = () =>{
-        this.setState({
-            isAuthenticated: !this.state.isAuthenticated
-        });
-        if(this.state.isAuthenticated) {
-            localStorage.setItem('authenticated', 'true')
-        }
-        else{
+        if(!this.state.isAuthenticated) {
+            return this.setState({
+                isAuthenticated: true
+            });
+        }else {
             localStorage.clear()
+            this.setState({isAuthenticated: false})
         }
 
     };

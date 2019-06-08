@@ -25,13 +25,29 @@ class LoginForm extends React.Component{
     };
 
     handleSubmit = () =>{
+        let passwordHash = require('password-hash')
 
         if (!this.state.username || !this.state.password) {
              return this.setState({ errors:{ user:'Username is required',
                                             pass: 'Password is required'}});
 
         }
-        this.props.handleLoginForm();
+        let hash = this.state.password//todo improve to actual hash in the future
+        hash=this.state.password
+        fetch('http://34.90.125.25:9000/api/users/login?login='+this.state.username+'&password='+hash)
+            .then(response =>response.json())
+            .then(token =>{
+                if(token) {
+
+                    localStorage.setItem('token', token)
+                    localStorage.setItem('authenticated', 'true')
+                    this.props.handleLoginForm();
+                }
+                else{
+                    console.log("wrong")
+                }
+            })
+
         return this.setState({ errors: '' });
     };
 

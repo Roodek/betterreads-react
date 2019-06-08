@@ -29,7 +29,6 @@ class Library extends Component {
         this.setState({books: data})
         this.setState({loading: false})
 
-
     }
     getSlicedData = async (currentPage) => {
         this.setState({loading: true})
@@ -114,8 +113,6 @@ class Library extends Component {
                 )
             }
         }
-
-
 
         return (
 

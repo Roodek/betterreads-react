@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Form} from 'react-bootstrap';
+import {Redirect} from 'react-router-dom'
 
 class SignUp extends Component {
     constructor(props){
@@ -12,11 +13,13 @@ class SignUp extends Component {
                 user: 'Enter Login',
                 pass: 'Enter Password',
                 conpass: 'repeat pass',
-            }
+            },
+            created: false
         }
     }
 
     handleSubmit = () =>{
+        let passwordHash = require('password-hash')
 
         if (!this.state.username || !this.state.password) {
             return  this.setState({
@@ -38,13 +41,39 @@ class SignUp extends Component {
                 //password:'',
                 confirmPass: '',
                 errors:{
-                    //user:'Username is required',
-                    //pass: 'Password is required',
                     conpass: 'Password not matched'}});
 
             }
 
         //todo send data to API
+        let hash = this.state.password //todo improve to actual hash in the future
+
+        fetch('http://34.90.125.25:9000/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                login: this.state.username,
+                password: hash,
+            })
+        }).then(response =>{
+            if(response.ok){
+                this.setState({created:true})
+                console.log("logs: "+ this.state.username+ "pass: "+ hash)
+                return
+            }
+            throw new Error('login already taken')
+        }).catch(error => {return this.setState({
+            username:'',
+            password:'',
+            confirmPass: '',
+            errors:{
+                user:'login already taken',
+                pass: '',
+                conpass: ''}
+        })})
+
 
         return this.setState({ errors: '' });
     };
@@ -59,6 +88,8 @@ class SignUp extends Component {
 
     render() {
         return(
+            <div>
+                {this.state.created && <Redirect to="/"/>}
                 <Form >
                     <Form.Group controlId="username">
                         <Form.Label/>
@@ -81,6 +112,7 @@ class SignUp extends Component {
                         Submit
                     </Button>
                 </Form>
+            </div>
         )
     }
 }
