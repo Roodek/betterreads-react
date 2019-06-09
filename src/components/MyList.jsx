@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import BookRecord from "./BookRecord";
 import {Redirect} from 'react-router-dom'
-import {Spinner} from "react-bootstrap";
+import {Spinner, Jumbotron} from "react-bootstrap";
 import './MyList.css'
 
 
@@ -64,8 +64,12 @@ class MyList extends Component {
         const toShowIitems = this.state.books.map(item => <BookRecord key={item.id} item={item} myList/>);
         return (
             <div className="mylist">
-                {isLoading(this.state.loading)}
+                {toShowIitems.length===0 && <Jumbotron>
+                    <h1>your library is empty</h1>
+                </Jumbotron>}
+
                 {toShowIitems}
+
 
             </div>
         );

@@ -4,6 +4,7 @@
     background-color: darkgray;
     background-repeat: repeat;
     background-blend-mode: overlay;
+    height: 100% !important;
 
 }
 .pages{

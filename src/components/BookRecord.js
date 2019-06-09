@@ -1,6 +1,6 @@
 import React from "react"
 import Image from 'react-image-resizer'
-import {Card, Button} from "react-bootstrap";
+import {Card, Button, Container, Col, Carousel, Row, Spinner} from "react-bootstrap";
 import StarRatings from 'react-star-ratings'
 import './BookRecord.css'
 
@@ -15,15 +15,20 @@ class BookRecord extends React.Component{
         this.state ={
             viewed: false,
             bookState: this.props.item.status,
-            rating: this.props.item.rating
+            rating: this.props.item.rating,
+            recommendedBooks: [],
+            loading:false
         }
     }
 
     handleOnClick = () =>{
         this.setState({viewed:!this.state.viewed})
+        if(this.props.myList){
+            this.getRecommededBooks(1)
+        }
     };
 
-    addBook =(status=this.state.bookState, rating=this.state.rating) =>{
+    addBook =(status=this.state.bookState, rating=Math.floor(this.state.rating)) =>{
 
         fetch('http://34.90.125.25:9000/api/users/library', {
             method: 'POST',
@@ -40,7 +45,7 @@ class BookRecord extends React.Component{
             if(response.ok){
                 return
             }
-            console.log(response)
+
             throw new Error('something went wrong')
         }).catch(error => {
             console.log(error)
@@ -58,8 +63,49 @@ class BookRecord extends React.Component{
         this.addBook(this.state.bookState,newRating)
     }
 
+    getRecommededBooks =async(currentPage) =>{
+        this.setState({loading: true})
+        try {
+
+            const api_call = await fetch("http://34.90.125.25:9000/api/books/page=" + currentPage);
+            const data = await api_call.json();
+            this.setState({recommendedBooks: data})
+            this.setState({loading: false})
+        }catch (e) {
+
+        }
+    }
+
+    isLoading = (loading) =>{
+        if(loading) {
+            return (
+                <div className="spinner">
+                    <Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </Spinner>
+                </div>
+            )
+        }
+    }
 
     showViewedBook =(viewed) =>{
+
+        let recommendedBooks = this.state.recommendedBooks.map(item => {
+            return(
+                <Carousel.Item key={item.id}>
+                    <img
+                        className="d-block w-100"
+                        src={item.image_url}
+                        alt="First slide"
+                    />
+                    <Carousel.Caption>
+                        <h3>{item.title}</h3>
+                    </Carousel.Caption>
+                </Carousel.Item>
+            );
+        })
+
+
         if(viewed){
 
             if(!this.props.myList) {
@@ -87,10 +133,15 @@ class BookRecord extends React.Component{
                 );
             }else {
                 return (
-                    <Card style={{width: '18rem'}}>
+                    <Card style={{width: '50%'}}>
                         <div className="book-card">
+                            <Container>
+                                <Row>
+                                    <Col>
                             <Image src={this.props.item.image_url} height={240} width={240}/>
+
                             <Card.Body>
+
                                 <Card.Title>{this.props.item.authors}</Card.Title>
                                 <Card.Text>
                                     Some quick example text to build on the card title and make up the bulk of
@@ -110,7 +161,20 @@ class BookRecord extends React.Component{
                                     changeRating={this.changeRating}
                                     starDimension='20px'
                                 />
+
+
                             </Card.Body>
+                                    </Col>
+                                <Col>
+                                    <h3>Recommended for you !!!</h3>
+                                    {this.isLoading(this.state.loading)}
+                                    <Carousel interval={3000}>
+                                        {recommendedBooks}
+                                    </Carousel>
+
+                                </Col>
+                            </Row>
+                            </Container>
                         </div>
                     </Card>
                 )
