@@ -84,7 +84,7 @@ class Library extends Component {
             pageNumbers.push(i);
         }*/
 
-        for(let i =Math.max(1,indexOfFirstPage);i <= Math.min(indexOfLastPage,400); i++){
+        for(let i =Math.max(1,indexOfFirstPage);i <= Math.min(indexOfLastPage,1000); i++){
             pageNumbers.push(i);
         }
 
@@ -127,7 +127,7 @@ class Library extends Component {
                     <ul  id="page-numbers">
                         <Button id={1} onClick={this.handleClick} variant="dark"> {"<<"} </Button>
                         {renderPageNumbers}
-                        <Button id={400} onClick={this.handleClick} variant="dark">{">>"}</Button>
+                        <Button id={1000} onClick={this.handleClick} variant="dark">{">>"}</Button>
                     </ul>
                 </div>
                 <ul id="book-records">
@@ -138,7 +138,7 @@ class Library extends Component {
                     <ul  id="page-numbers">
                         <Button id={1} onClick={this.handleClick} variant="dark"> {"<<"} </Button>
                         {renderPageNumbers}
-                        <Button id={400} onClick={this.handleClick} variant="dark">{">>"}</Button>
+                        <Button id={1000} onClick={this.handleClick} variant="dark">{">>"}</Button>
                     </ul>
                 </div>
                 <br/>

@@ -76,6 +76,11 @@ class BookRecord extends React.Component{
                                 {localStorage.getItem('authenticated') && !this.props.myList &&
                                 <Button variant="info" onClick={() => this.addBook()}>Add to my List</Button>}
 
+                                <StarRatings
+                                    rating={this.state.rating}
+                                    starRatedColor='blue'
+                                    starDimension='20px'
+                                />
                             </Card.Body>
                         </div>
                     </Card>

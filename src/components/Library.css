@@ -4,7 +4,14 @@
     background-color: darkgray;
     background-repeat: repeat;
     background-blend-mode: overlay;
+    height: 100% !important;
 
+
+}
+html,body{
+    margin:0;
+    padding: 0 0 0 0;
+    height: 100%;
 }
 .pages{
     text-align: center;
