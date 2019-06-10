@@ -13,6 +13,7 @@ class BookRecord extends React.Component{
         super(props)
 
         this.state ={
+            userId: '',
             viewed: false,
             bookState: this.props.item.status,
             rating: this.props.item.rating,
@@ -21,10 +22,12 @@ class BookRecord extends React.Component{
         }
     }
 
+
     handleOnClick = () =>{
         this.setState({viewed:!this.state.viewed})
         if(this.props.myList){
-            this.getRecommededBooks(1)
+
+            this.getUserIdAndRecommendedBooks()
         }
     };
 
@@ -39,13 +42,17 @@ class BookRecord extends React.Component{
             body: JSON.stringify({
                 id: this.props.item.id,
                 rating: rating,
-                status: status
+                status: 'status'
             })
         }).then(response =>{
             if(response.ok){
                 return
             }
-
+            console.log(JSON.stringify({
+                id: this.props.item.id,
+                rating: rating,
+                status: status
+            }))
             throw new Error('something went wrong')
         }).catch(error => {
             console.log(error)
@@ -63,18 +70,6 @@ class BookRecord extends React.Component{
         this.addBook(this.state.bookState,newRating)
     }
 
-    getRecommededBooks =async(currentPage) =>{
-        this.setState({loading: true})
-        try {
-
-            const api_call = await fetch("http://34.90.125.25:9000/api/books/page=" + currentPage);
-            const data = await api_call.json();
-            this.setState({recommendedBooks: data})
-            this.setState({loading: false})
-        }catch (e) {
-
-        }
-    }
 
     isLoading = (loading) =>{
         if(loading) {
@@ -88,9 +83,60 @@ class BookRecord extends React.Component{
         }
     }
 
-    showViewedBook =(viewed) =>{
+    getBook =async (id) =>{
+        try {
+
+            //const api_call = await fetch("http://34.90.125.25:9000/api/books/" + id);
+            //const data = await api_call.json();
+            let book =''
+            await fetch("http://34.90.125.25:9000/api/books/" + id).then(response =>response.json())
+                .then(data => {book=data});
+            this.setState({loading: false})
+
+            return book
+        }catch (e) {
+
+        }
+    }
+    getUserIdAndRecommendedBooks = async () => {
+
+        this.setState({loading: true})
+        let books=[]
+        try {
+            //get userId
+            const api_call = await fetch("http://34.90.125.25:9000/api/users",{
+                method:'get',
+                headers:{
+                    'Authorization': localStorage.getItem('token')
+                }
+
+            });
+            const id = await api_call.json();
+            this.setState({userId: id})
+
+            //get booksIds
+                await fetch("http://34.90.125.25:9000/api/users/recommended/"+1).then(response =>response.json())
+                .then(data =>{
+                    data.items.map(async(item) =>{
+
+                        books.push( await this.getBook(item.contentItemId))
+                    })
+                    this.setState({recommendedBooks: books})
+
+                });
+
+            this.setState({loading: false})
+        }catch (e) {
+
+        }
+
+    }
+
+    showViewedBook = (viewed) =>{
+
 
         let recommendedBooks = this.state.recommendedBooks.map(item => {
+
             return(
                 <Carousel.Item key={item.id}>
                     <img
@@ -104,7 +150,6 @@ class BookRecord extends React.Component{
                 </Carousel.Item>
             );
         })
-
 
         if(viewed){
 
@@ -133,7 +178,7 @@ class BookRecord extends React.Component{
                 );
             }else {
                 return (
-                    <Card style={{width: '50%'}}>
+                    <Card style={{width: '40%'}}>
                         <div className="book-card">
                             <Container>
                                 <Row>
@@ -168,7 +213,7 @@ class BookRecord extends React.Component{
                                 <Col>
                                     <h3>Recommended for you !!!</h3>
                                     {this.isLoading(this.state.loading)}
-                                    <Carousel interval={3000}>
+                                    <Carousel interval={1500}>
                                         {recommendedBooks}
                                     </Carousel>
 
