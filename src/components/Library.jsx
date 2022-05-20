@@ -3,7 +3,8 @@ import BookRecord from "./BookRecord";
 import {Spinner,Button} from "react-bootstrap";
 import './Library.css';
 import SearchBar from "./SearchBar";
-
+import config from "../config";
+import booksToDisplay from './books';
 
 
 class Library extends Component {
@@ -24,8 +25,12 @@ class Library extends Component {
 
     getData = async () => {
         this.setState({loading: true})
-        const api_call = await fetch("http://34.90.125.25:9000/api/books/");
-        const data =  await api_call.json();
+        //const api_call = await fetch(config.apiAddress + "/books/");
+        //let data =  await api_call.json();
+        //if (data == null || data.length==0){
+        let data = booksToDisplay
+        //}
+
         this.setState({books: data})
         this.setState({loading: false})
 
@@ -33,10 +38,9 @@ class Library extends Component {
     getSlicedData = async (currentPage) => {
         this.setState({loading: true})
         try {
-
-
-            const api_call = await fetch("http://34.90.125.25:9000/api/books/page=" + currentPage);
-            const data = await api_call.json();
+           // const api_call = await fetch(config.apiAddress + "/books/page=" + currentPage);
+            //const data = await api_call.json();
+            let data = booksToDisplay.slice((currentPage-1)*10,(currentPage-1)*10+15)
             this.setState({books: data})
             this.setState({loading: false})
         }catch (e) {
@@ -53,10 +57,9 @@ class Library extends Component {
     handleSearch =async(searchPhrase) =>{
         this.setState({loading: true})
         try {
-
-
-            const api_call = await fetch("http://34.90.125.25:9000/api/books/search?query=" + searchPhrase);
-            const data = await api_call.json();
+            //const api_call = await fetch(config.apiAddress + "/books/search?query=" + searchPhrase);
+            //const data = await api_call.json();
+            let data = booksToDisplay.filter(book => book.authors.toString().includes(searchPhrase))
             this.setState({books: data})
             this.setState({loading: false})
         }catch (e) {
@@ -74,7 +77,7 @@ class Library extends Component {
         //const currentBooks = books.slice(indexOfFirstBook,indexOfLastBook);
         const currentBooks = books
 
-        const renderBooks = currentBooks.map(item => <BookRecord key={item.id} item={item}/>);
+        const renderBooks = currentBooks.map(item => <BookRecord key={item.id} item={item} currentPage={currentPage}/>);
 
         const indexOfFirstPage=currentPage-3;
         const indexOfLastPage=currentPage+3;

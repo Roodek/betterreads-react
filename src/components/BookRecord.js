@@ -3,6 +3,7 @@ import Image from 'react-image-resizer'
 import {Card, Button, Container, Col, Carousel, Row, Spinner} from "react-bootstrap";
 import StarRatings from 'react-star-ratings'
 import './BookRecord.css'
+import booksToDisplay from "./books";
 
 
 
@@ -18,7 +19,8 @@ class BookRecord extends React.Component{
             bookState: this.props.item.status,
             rating: this.props.item.rating,
             recommendedBooks: [],
-            loading:false
+            loading:false,
+            currentPage:0
         }
     }
 
@@ -33,30 +35,44 @@ class BookRecord extends React.Component{
 
     addBook =(status=this.state.bookState, rating=Math.floor(this.state.rating)) =>{
 
-        fetch('http://34.90.125.25:9000/api/users/library', {
-            method: 'POST',
-            headers: {
-                'Authorization': localStorage.getItem('token'),
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: this.props.item.id,
-                rating: rating,
-                status: 'status'
-            })
-        }).then(response =>{
-            if(response.ok){
-                return
-            }
-            console.log(JSON.stringify({
-                id: this.props.item.id,
-                rating: rating,
-                status: status
-            }))
-            throw new Error('something went wrong')
-        }).catch(error => {
-            console.log(error)
+        // fetch('http://34.90.125.25:9000/api/users/library', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Authorization': localStorage.getItem('token'),
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         id: this.props.item.id,
+        //         rating: rating,
+        //         status: 'status'
+        //     })
+        // }).then(response =>{
+        //     if(response.ok){
+        //         return
+        //     }
+        //     console.log(JSON.stringify({
+        //         id: this.props.item.id,
+        //         rating: rating,
+        //         status: status
+        //     }))
+        //     throw new Error('something went wrong')
+        // }).catch(error => {
+        //     console.log(error)
+        // })
+        let collection = JSON.stringify({
+            id: this.props.item.id,
+            rating: rating,
+            status: 'status',
+            image_url: this.props.item.image_url
         })
+        let jsonString =''
+        if(localStorage.getItem(localStorage.getItem("userID"))){
+            jsonString = localStorage.getItem(localStorage.getItem("userID"))+"||"+collection
+        }else{
+            jsonString = collection
+        }
+
+        localStorage.setItem(localStorage.getItem("userID"),jsonString)
 
         this.setState({
             bookState: status,
@@ -84,19 +100,20 @@ class BookRecord extends React.Component{
     }
 
     getBook =async (id) =>{
-        try {
+        // try {
 
-            //const api_call = await fetch("http://34.90.125.25:9000/api/books/" + id);
-            //const data = await api_call.json();
-            let book =''
-            await fetch("http://34.90.125.25:9000/api/books/" + id).then(response =>response.json())
-                .then(data => {book=data});
-            this.setState({loading: false})
+        //     //const api_call = await fetch("http://34.90.125.25:9000/api/books/" + id);
+        //     //const data = await api_call.json();
+        //     let book =''
+        //     await fetch("http://34.90.125.25:9000/api/books/" + id).then(response =>response.json())
+        //         .then(data => {book=data});
+        //     this.setState({loading: false})
 
-            return book
-        }catch (e) {
+        //     return book
+        // }catch (e) {
 
-        }
+        // }
+        return booksToDisplay.filter(book=>book.id==id)[0]
     }
     getUserIdAndRecommendedBooks = async () => {
 
@@ -104,26 +121,28 @@ class BookRecord extends React.Component{
         let books=[]
         try {
             //get userId
-            const api_call = await fetch("http://34.90.125.25:9000/api/users",{
-                method:'get',
-                headers:{
-                    'Authorization': localStorage.getItem('token')
-                }
+            // const api_call = await fetch("http://34.90.125.25:9000/api/users",{
+            //     method:'get',
+            //     headers:{
+            //         'Authorization': localStorage.getItem('token')
+            //     }
 
-            });
-            const id = await api_call.json();
-            this.setState({userId: id})
+            // });
+            // const id = await api_call.json();
+            //this.setState({userId: id})
+            this.setState({userId: localStorage.getItem("userID")})
 
+            this.setState({recommendedBooks:booksToDisplay.slice((this.state.currentPage+3)*10,(this.state.currentPage+3)*10+5)})
             //get booksIds
-                await fetch("http://34.90.125.25:9000/api/users/recommended/"+1).then(response =>response.json())
-                .then(data =>{
-                    data.items.map(async(item) =>{
+                // await fetch("http://34.90.125.25:9000/api/users/recommended/"+1).then(response =>response.json())
+                // .then(data =>{
+                //     data.items.map(async(item) =>{
 
-                        books.push( await this.getBook(item.contentItemId))
-                    })
-                    this.setState({recommendedBooks: books})
+                //         books.push( await this.getBook(item.contentItemId))
+                //     })
+                //     this.setState({recommendedBooks: books})
 
-                });
+                // });
 
             this.setState({loading: false})
         }catch (e) {
@@ -168,7 +187,7 @@ class BookRecord extends React.Component{
                                 <Button variant="info" onClick={() => this.addBook()}>Add to my List</Button>}
 
                                 <StarRatings
-                                    rating={this.state.rating}
+                                    rating={this.state.rating||0.0}
                                     starRatedColor='blue'
                                     starDimension='20px'
                                 />
@@ -201,7 +220,7 @@ class BookRecord extends React.Component{
                                         onClick={() => this.addBook('I already read that')}>I already read that</Button>
 
                                 <StarRatings
-                                    rating={this.state.rating}
+                                    rating={this.state.rating||0.0}
                                     starRatedColor='blue'
                                     changeRating={this.changeRating}
                                     starDimension='20px'

@@ -35,29 +35,36 @@ class LoginForm extends React.Component{
         let hash = this.state.password//todo improve to actual hash in the future
         hash=this.state.password
         //fetch('http://34.90.125.25:9000/api/users/login?login='+this.state.username+'&password='+hash)
-        fetch('http://34.90.125.25:9000/api/users/login',{
-            method:'post',
-            headers:{
-                'Content-Type': 'application/json'
-            },
-            body:JSON.stringify({
-                login: this.state.username,
-                password: hash,
-            })
-        })
-            .then(response =>response.json())
-            .then(token =>{
-                if(token) {
+        // fetch('http://34.90.125.25:9000/api/users/login',{
+        //     method:'post',
+        //     headers:{
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body:JSON.stringify({
+        //         login: this.state.username,
+        //         password: hash,
+        //     })
+        // })
+        //     .then(response =>response.json())
+        //     .then(token =>{
+        //         if(token) {
 
-                    localStorage.setItem('token', token)
-                    localStorage.setItem('authenticated', 'true')
-                    this.props.handleLoginForm();
-                }
-                else{
-                    console.log("wrong")
-                }
-            })
-
+        //             localStorage.setItem('token', token)
+        //             localStorage.setItem('authenticated', 'true')
+        //             this.props.handleLoginForm();
+        //         }
+        //         else{
+        //             console.log("wrong")
+        //         }
+        //     })
+        localStorage.setItem('token', hash)
+        localStorage.setItem('authenticated', 'true')
+        localStorage.setItem('userID',hash)
+        
+        // localStorage.setItem(hash,null)
+        
+        this.props.handleLoginForm();
+        
         return this.setState({ errors: '' });
     };
 

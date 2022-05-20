@@ -20,21 +20,23 @@ class MyList extends Component {
     getData = async () => {
         
         this.setState({loading: true})
-        try {
-            const api_call = await fetch("http://34.90.125.25:9000/api/users/library",{
-                method:'get',
-                headers:{
+        // try {
+        //     const api_call = await fetch("http://34.90.125.25:9000/api/users/library",{
+        //         method:'get',
+        //         headers:{
 
-                    'Authorization': localStorage.getItem('token')
-                }
+        //             'Authorization': localStorage.getItem('token')
+        //         }
 
-            });
-            const data = await api_call.json();
-            this.setState({books: data})
-            this.setState({loading: false})
-        }catch (e) {
+        //     });
+        //     const data = await api_call.json();
+        let jsonString = localStorage.getItem(localStorage.getItem("userID"))
+        let booksArr = jsonString.split('||').map(str => JSON.parse(str))
+        this.setState({books: booksArr})
+        this.setState({loading: false})
+        // }catch (e) {
             
-        }
+        // }
 
     }
 
